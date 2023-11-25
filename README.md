@@ -1,6 +1,6 @@
-A simple demo to-do list app.
+# Kronos To-Do
 
-#Kronos To-Do
+A simple demo to-do list app.
 
 ## Tech Stack
 * Angular 17 front end
