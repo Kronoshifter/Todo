@@ -1,5 +1,5 @@
 package com.kronos.utils
 
-data class UserSession(
+data class TodoSession(
   val id: String
 )

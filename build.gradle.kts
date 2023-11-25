@@ -33,12 +33,19 @@ dependencies {
   // ktor common
   implementation(libs.ktor.serialization.kotlinx.json)
 
+  // koin
+  implementation(platform(libs.koin.bom))
+  compileOnly(libs.koin.core)
+  implementation(libs.bundles.koin)
+
+  // supabase
   implementation(platform(libs.supabase.bom))
   implementation(libs.supabase.postgrest)
 
   // misc
   implementation(libs.kotlin.faker)
   implementation(libs.kotlinx.serialization.json)
+  implementation(libs.ks3.jdk)
 
   // logging
   implementation(libs.logback.classic)

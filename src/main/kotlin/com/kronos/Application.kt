@@ -1,19 +1,31 @@
 package com.kronos
 
-import com.kronos.plugins.*
+import com.kronos.plugins.configureHTTP
+import com.kronos.plugins.configureRouting
+import com.kronos.plugins.configureSecurity
+import com.kronos.plugins.configureSerialization
+import com.kronos.utils.TodoConfig
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import kotlinx.serialization.Serializable
+import org.koin.dsl.module
+import org.koin.ktor.plugin.Koin
+import org.koin.logger.slf4jLogger
 
-fun main() {
 
-
-  embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
-    .start(wait = true)
-}
+fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
+  val configModule = module {
+    single { TodoConfig(environment) }
+  }
+
+  install(Koin) {
+
+    slf4jLogger()
+    modules(
+      configModule
+    )
+  }
   configureHTTP()
   configureSecurity()
   configureSerialization()
