@@ -1,0 +1,13 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+max_line_length = off
+
+[*.{java,kt,kts,html,js,ts,less,css,sass,scss,json,yaml}]
+indent_size = 2
+indent_style = space
+ij_continuation_indent_size = 2
+tab_width = 2
