@@ -35,6 +35,9 @@ dependencies {
 
   // koin
   implementation(platform(libs.koin.bom))
+  implementation("io.ktor:ktor-server-core-jvm:2.3.6")
+  implementation("io.ktor:ktor-server-host-common-jvm:2.3.6")
+  implementation("io.ktor:ktor-server-status-pages-jvm:2.3.6")
   compileOnly(libs.koin.core)
   implementation(libs.bundles.koin)
 
@@ -46,6 +49,7 @@ dependencies {
   implementation(libs.kotlin.faker)
   implementation(libs.kotlinx.serialization.json)
   implementation(libs.ks3.jdk)
+  implementation(libs.kotlin.result)
 
   // logging
   implementation(libs.logback.classic)

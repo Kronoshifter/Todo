@@ -12,6 +12,7 @@ ktor-server-sessions = { module = "io.ktor:ktor-server-sessions", version.ref = 
 ktor-server-default-headers = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
 ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-server-rate-limit = { module = "io.ktor:ktor-server-rate-limit", version.ref = "ktor" }
 
 # ktor client
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -45,9 +46,18 @@ logback-classic = { module = "ch.qos.logback:logback-classic", version = "1.4.11
 kotlin-faker = { module = "io.github.serpro69:kotlin-faker", version = "1.15.0" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.0" }
 ks3-jdk = { module = "io.ks3:ks3-jdk", version = "0.3.1" }
+kotlin-result = { module = "com.michael-bull.kotlin-result:kotlin-result", version = "1.1.18" }
 
 [bundles]
-ktor-server = ["ktor-server-core", "ktor-server-netty", "ktor-server-sessions", "ktor-server-default-headers", "ktor-server-status-pages", "ktor-server-content-negotiation"]
+ktor-server = [
+    "ktor-server-core",
+    "ktor-server-netty",
+    "ktor-server-sessions",
+    "ktor-server-default-headers",
+    "ktor-server-status-pages",
+    "ktor-server-content-negotiation",
+    "ktor-server-rate-limit"
+]
 ktor-client = ["ktor-client-core", "ktor-client-logging", "ktor-client-content-negotiation", "ktor-client-okhttp", "ktor-client-cio"]
 koin = ["koin-ktor", "koin-logger-slf4j"]
 kotest = ["kotest-runner-junit5", "kotest-assertions-core", "kotest-property"]
