@@ -27,8 +27,9 @@ fun Application.configureSecurity() {
   }
   routing {
     get("/login") {
-      call.sessions.set(TodoSession(id = "1"))
-      call.respondText("Logged in")
+      call.sessions.set(TodoSession(id = "123abc"))
+      call.respondText("Logged in\n")
+//      call.respondRedirect("/todos")
     }
 
     get("/todos") {
@@ -36,13 +37,14 @@ fun Application.configureSecurity() {
       if (session != null) {
         call.respondText("Hello ${session.id}")
       } else {
-        call.respondText("No session")
+        call.respondText("No session\n")
       }
     }
 
     get("/logout") {
       call.sessions.clear<TodoSession>()
-      call.respondText("Logged out")
+      call.respondText("Logged out\n")
+//      call.respondRedirect("/todos")
     }
   }
 }

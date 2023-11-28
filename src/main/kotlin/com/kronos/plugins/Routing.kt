@@ -44,7 +44,10 @@ fun Route.taskApi() {
     post {
       // TODO use real data
       val req = call.receive<TodoTask>()
-      database.insertTask(req)
+      database.insertTask(req).guard {
+        call.respond(HttpStatusCode.BadRequest, it.message)
+        return@post
+      }
       call.respond(HttpStatusCode.OK)
     }
 
@@ -62,14 +65,20 @@ fun Route.taskApi() {
       delete {
         // TODO use real data
         val id = call.parameters["id"]!!
-        database.deleteTask(id)
+        database.deleteTask(id).guard {
+          call.respond(HttpStatusCode.NotFound, it.message)
+          return@delete
+        }
         call.respond(HttpStatusCode.OK)
       }
 
       patch {
         // TODO use real data
         val req = call.receive<TodoTaskUpdateRequest>()
-        database.updateTask(req.task)
+        database.updateTask(req.task).guard {
+          call.respond(HttpStatusCode.NotFound, it.message)
+          return@patch
+        }
         call.respond(HttpStatusCode.OK)
       }
     }

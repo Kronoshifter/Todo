@@ -54,22 +54,26 @@ class FakeTaskDatabase(private val seed: Long? = null) : TaskDatabase() {
     fakerConfig {
       randomSeed = seed
     }
-  }.also { faker ->
-    faker.randomProvider.configure {
-      typeGenerator<TodoTask> {
-        TodoTask(
-          id = faker.random.nextUUID(),
-          title = faker.backToTheFuture.characters(),
-          description = faker.backToTheFuture.characters(),
-          completed = faker.random.nextBoolean(),
-          dueDate = Instant.now().plus(Duration.ofDays(faker.random.nextLong(10))),
-        )
-      }
-    }
   }
 
-  override val tasks = MutableList(100) {
-    faker.randomProvider.randomClassInstance<TodoTask>()
+  override val tasks: MutableList<TodoTask> = MutableList(100) {
+    faker.randomProvider.randomClassInstance<TodoTask>() {
+      namedParameterGenerator("id") {
+        faker.random.nextUUID()
+      }
+      namedParameterGenerator("title") {
+        faker.backToTheFuture.characters()
+      }
+      namedParameterGenerator("description") {
+        faker.backToTheFuture.quotes()
+      }
+      namedParameterGenerator("completed") {
+        faker.random.nextBoolean()
+      }
+      namedParameterGenerator("dueDate") {
+        Instant.now().plus(Duration.ofDays(3)).takeIf { faker.random.nextInt(0, 3) == 0 }
+      }
+    }
   }
 
 
