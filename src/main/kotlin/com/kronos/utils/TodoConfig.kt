@@ -6,6 +6,8 @@ import java.lang.IllegalStateException
 class TodoConfig(private val environment: ApplicationEnvironment) {
   val sessionSigningKey by env("ktor.session.signingKey")
   val sessionEncryptionKey by env("ktor.session.encryptionKey")
+  val devMode by lazy { environment.developmentMode }
+
 
   private fun env(path: String): Lazy<String> = lazy { environment.config.propertyOrNull(path)?.getString().orThrowMissing(path) }
 
