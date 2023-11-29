@@ -1,22 +1,43 @@
 package com.kronos.plugins
 
+import com.kronos.utils.TodoConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
+import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.serialization.Serializable
+import org.koin.ktor.ext.inject
+import java.io.File
+import javax.print.attribute.standard.Compression
 
 fun Application.configureServer() {
+  val config by inject<TodoConfig>()
+  install(Compression) {
+    gzip {
+      priority = 1.0
+    }
+    deflate {
+      priority = 10.0
+      minimumSize(1024) // condition
+    }
+  }
   install(StatusPages) {
     status(HttpStatusCode.NotFound) { call, _ ->
       val uri = call.request.uri
       if ("/api/" in uri) {
         return@status
       }
+
+      // If in dev mode, find files in directory, otherwise, serve from resources
+      if (config.devMode) {
+        call.respondFile(File("src/main/resources/web/browser"), "index.html")
+      } else {
+        call.resolveResource("browser/index.html", "web")?.let { call.respond(it) }
+      }
     }
-
-
 
     exception<Throwable> { call, cause ->
       call.application.log.warn("Unhandled error", cause)

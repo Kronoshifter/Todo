@@ -13,6 +13,7 @@ ktor-server-default-headers = { module = "io.ktor:ktor-server-default-headers", 
 ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 ktor-server-rate-limit = { module = "io.ktor:ktor-server-rate-limit", version.ref = "ktor" }
+ktor-server-compression = { module = "io.ktor:ktor-server-compression", version.ref = "ktor" }
 
 # ktor client
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -56,7 +57,8 @@ ktor-server = [
     "ktor-server-default-headers",
     "ktor-server-status-pages",
     "ktor-server-content-negotiation",
-    "ktor-server-rate-limit"
+    "ktor-server-rate-limit",
+    "ktor-server-compression"
 ]
 ktor-client = ["ktor-client-core", "ktor-client-logging", "ktor-client-content-negotiation", "ktor-client-okhttp", "ktor-client-cio"]
 koin = ["koin-ktor", "koin-logger-slf4j"]

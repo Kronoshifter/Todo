@@ -7,7 +7,6 @@ import com.kronos.plugins.configureSerialization
 import com.kronos.utils.FakeTaskDatabase
 import com.kronos.utils.TodoConfig
 import io.ktor.server.application.*
-import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.routing.*
