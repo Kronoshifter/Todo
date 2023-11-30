@@ -18,7 +18,7 @@ import org.koin.logger.slf4jLogger
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
-fun Application.module() {
+fun Application.core() {
   val configModule = module {
     single { TodoConfig(environment) }
     single { FakeTaskDatabase(19551105) }

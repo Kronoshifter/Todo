@@ -4,14 +4,15 @@ import com.kronos.utils.TodoConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
+import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
+import org.slf4j.event.*
 import java.io.File
-import javax.print.attribute.standard.Compression
 
 fun Application.configureServer() {
   val config by inject<TodoConfig>()
@@ -24,6 +25,16 @@ fun Application.configureServer() {
       minimumSize(1024) // condition
     }
   }
+
+  install(CallLogging) {
+    level = Level.TRACE
+    filter { call -> call.request.path().startsWith("/api") }
+    format { call ->
+      //TODO check this and make sure it's what I want
+      "${call.request.httpMethod.value} ${call.request.path()} ${call.response.status()}"
+    }
+  }
+
   install(StatusPages) {
     status(HttpStatusCode.NotFound) { call, _ ->
       val uri = call.request.uri
