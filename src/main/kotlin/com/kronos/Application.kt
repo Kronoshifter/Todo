@@ -36,6 +36,8 @@ fun Application.core() {
   configureSerialization()
   configureRouting()
 
+  log.info("Server configuration complete, configuring web application")
+
   routing {
     singlePageApplication {
       val config by inject<TodoConfig>()

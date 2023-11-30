@@ -1,6 +1,5 @@
 package com.kronos.plugins
 
-import com.github.michaelbull.result.*
 import com.kronos.model.TodoTask
 import com.kronos.utils.FakeTaskDatabase
 import com.kronos.utils.guard
@@ -72,12 +71,12 @@ fun Route.taskApi() {
         call.respond(HttpStatusCode.OK)
       }
 
-      patch {
+      put {
         // TODO use real data
         val req = call.receive<TodoTaskUpdateRequest>()
         database.updateTask(req.task).guard {
           call.respond(HttpStatusCode.NotFound, it.message)
-          return@patch
+          return@put
         }
         call.respond(HttpStatusCode.OK)
       }
