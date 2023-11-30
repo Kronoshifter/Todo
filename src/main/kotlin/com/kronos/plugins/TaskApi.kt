@@ -35,15 +35,17 @@ fun Route.taskApi() {
     route("/task") {
       get {
         // TODO use real data
-        call.respond(
-          TodoTaskResponse(database.list())
-        )
+        call.respond(database.taskList())
+      }
+
+      get("/response") {
+        call.respond(TodoTaskResponse(database.taskList()))
       }
 
       post {
         // TODO use real data
-        val req = call.receive<TodoTask>()
-        database.insertTask(req).guard {
+        val req = call.receive<TodoTaskUpdateRequest>()
+        database.insertTask(req.task).guard {
           call.respond(HttpStatusCode.BadRequest, it.message)
           return@post
         }

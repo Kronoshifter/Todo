@@ -1,5 +1,6 @@
 package com.kronos.model
 
+import io.ks3.java.time.InstantAsLongSerializer
 import io.ks3.java.time.InstantAsStringSerializer
 import kotlinx.serialization.Serializable
 import java.time.Instant
@@ -10,7 +11,7 @@ data class TodoTask(
   val title: String,
   val description: String,
   val completed: Boolean,
-  @Serializable(with = InstantAsStringSerializer::class)
+  @Serializable(with = InstantAsLongSerializer::class)
   val dueDate: Instant?,
 //  val children: List<TodoTask>
 )

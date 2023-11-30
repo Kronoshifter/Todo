@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http'
 import { SessionService } from './session.service'
 import { catchError, Observable, tap } from 'rxjs'
+import { TodoTask, TodoTaskResponse } from '../model/todo-task'
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class NetworkAPIService {
   ) {
   }
 
-  private handleError(error: HttpErrorResponse) {
+  handleError(error: HttpErrorResponse) {
     if (!error.ok) {
       const message = `Error ${error.status}: ${error.error}`
       throw new Error(message)
@@ -52,5 +53,23 @@ export class NetworkAPIService {
         this.session.session = null
       }),
     )
+  }
+
+  fetchTasks(): Observable<TodoTask[]> {
+    return this.http.get<TodoTask[]>('/api/task', {
+      headers: {
+        'Accept': 'application/json',
+        ...this.session.authHeadersMap()
+      },
+    })
+  }
+
+  fetchTaskResponse(): Observable<TodoTaskResponse> {
+    return this.http.get<TodoTaskResponse>('/api/task/response', {
+      headers: {
+        'Accept': 'application/json',
+        ...this.session.authHeadersMap()
+      },
+    })
   }
 }

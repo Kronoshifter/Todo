@@ -12,7 +12,7 @@ import java.time.Instant
 
 
 sealed interface Database {
-  fun list(): List<TodoTask>
+  fun taskList(): List<TodoTask>
   fun getTask(id: String): Result<TodoTask, DatabaseError>
   fun insertTask(task: TodoTask): Result<Boolean, DatabaseError>
   fun updateTask(task: TodoTask): Result<Boolean, DatabaseError>
@@ -22,7 +22,7 @@ sealed interface Database {
 open class TaskDatabase : Database {
   protected open val tasks = mutableListOf<TodoTask>()
 
-  override fun list(): List<TodoTask> {
+  override fun taskList(): List<TodoTask> {
     return tasks.toList()
   }
 
@@ -56,7 +56,7 @@ class FakeTaskDatabase(private val seed: Long? = null) : TaskDatabase() {
     }
   }
 
-  override val tasks: MutableList<TodoTask> = MutableList(100) {
+  override val tasks: MutableList<TodoTask> = MutableList(10) {
     faker.randomProvider.randomClassInstance<TodoTask>() {
       namedParameterGenerator("id") {
         faker.random.nextUUID()
