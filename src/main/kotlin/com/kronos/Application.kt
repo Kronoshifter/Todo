@@ -1,7 +1,7 @@
 package com.kronos
 
 import com.kronos.plugins.configureServer
-import com.kronos.plugins.configureRouting
+import com.kronos.plugins.configureTaskApi
 import com.kronos.plugins.configureSecurity
 import com.kronos.plugins.configureSerialization
 import com.kronos.utils.FakeTaskDatabase
@@ -32,9 +32,9 @@ fun Application.core() {
   }
 
   configureServer()
-  configureSecurity()
   configureSerialization()
-  configureRouting()
+  configureSecurity()
+  configureTaskApi()
 
   log.info("Server configuration complete, configuring web application")
 
@@ -46,5 +46,11 @@ fun Application.core() {
       defaultPage = "index.html"
       ignoreFiles { it.endsWith(".txt") }
     }
+  }
+}
+
+fun Application.configureApi(build: Route.() -> Unit) {
+  routing {
+    route("/api", build = build)
   }
 }

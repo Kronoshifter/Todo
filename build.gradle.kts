@@ -35,6 +35,8 @@ dependencies {
 
   // koin
   implementation(platform(libs.koin.bom))
+  implementation("io.ktor:ktor-server-auth-jvm:2.3.6")
+  implementation("io.ktor:ktor-server-core-jvm:2.3.6")
   compileOnly(libs.koin.core)
   implementation(libs.bundles.koin)
 

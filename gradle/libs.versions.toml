@@ -15,6 +15,7 @@ ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negoti
 ktor-server-rate-limit = { module = "io.ktor:ktor-server-rate-limit", version.ref = "ktor" }
 ktor-server-compression = { module = "io.ktor:ktor-server-compression", version.ref = "ktor" }
 ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
 #ktor-server-call-id = { module = "io.ktor:ktor-server-call-id", version.ref = "ktor" }
 
 # ktor client
@@ -61,7 +62,8 @@ ktor-server = [
     "ktor-server-content-negotiation",
     "ktor-server-rate-limit",
     "ktor-server-compression",
-    "ktor-server-call-logging"
+    "ktor-server-call-logging",
+    "ktor-server-auth",
 ]
 ktor-client = ["ktor-client-core", "ktor-client-logging", "ktor-client-content-negotiation", "ktor-client-okhttp", "ktor-client-cio"]
 koin = ["koin-ktor", "koin-logger-slf4j"]

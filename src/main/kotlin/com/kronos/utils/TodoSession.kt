@@ -1,8 +1,11 @@
 package com.kronos.utils
 
-import kotlinx.serialization.Serializable
+import io.ktor.server.auth.*
 
-@Serializable
 data class TodoSession(
-  val id: String
+  val auth: TodoAuth
 )
+
+data class TodoAuth(
+  val userId: String,
+) : Principal
