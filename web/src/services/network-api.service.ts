@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http'
 import { SessionService } from './session.service'
-import { catchError, firstValueFrom, Observable } from 'rxjs'
+import { catchError, Observable, tap } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
@@ -22,27 +22,35 @@ export class NetworkAPIService {
   }
 
   login(username: string, password: string): Observable<HttpResponse<string>> {
-    const req = this.http.get('/api/login', {
+    return this.http.get('/api/login', {
       responseType: 'text',
       observe: 'response',
     }).pipe(
       catchError((err, it) => {
         this.handleError(err)
         return it
-      })
+      }),
+      tap((res) => {
+        this.session.userId = '123abc'
+        this.session.session = res.headers.get('x-session-id')
+      }),
     )
+  }
 
-    req.subscribe({
-        next: (res) => {
-          this.session.userId = '123abc'
-          this.session.session = res.headers.get('x-session-id')
-        },
-        error: (err) => {
-          this.handleError(err)
-        }
-      }
+  logout(): Observable<HttpResponse<string>> {
+    return this.http.get('/api/logout', {
+      headers: this.session.authHeaders(),
+      responseType: 'text',
+      observe: 'response',
+    }).pipe(
+      catchError((err, it) => {
+        this.handleError(err)
+        return it
+      }),
+      tap((res) => {
+        this.session.userId = null
+        this.session.session = null
+      }),
     )
-
-    return req
   }
 }
