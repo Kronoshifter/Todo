@@ -9,6 +9,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": false,
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
