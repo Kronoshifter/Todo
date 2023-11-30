@@ -30,7 +30,6 @@ fun Application.configureServer() {
     level = Level.TRACE
     filter { call -> call.request.path().startsWith("/api") }
     format { call ->
-      //TODO check this and make sure it's what I want
       "${call.request.httpMethod.value}: ${call.request.path()} -- ${call.response.status()}"
     }
   }
