@@ -8,11 +8,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { MatChipsModule } from '@angular/material/chips'
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
+import { MatRippleModule } from '@angular/material/core'
 
 @Component({
   selector: 'todo-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatCheckboxModule, FormsModule, FaIconComponent, MatChipsModule],
+  imports: [CommonModule, MatCardModule, MatCheckboxModule, FormsModule, FaIconComponent, MatChipsModule, MatRippleModule],
   templateUrl: './todo-card.component.html',
   styleUrl: './todo-card.component.scss',
 })

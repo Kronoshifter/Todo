@@ -1,4 +1,4 @@
-<mat-card appearance="outlined" class="task-card">
+<mat-card matRipple appearance="outlined" class="task-card">
   <mat-checkbox class="checkbox" [(ngModel)]="task.completed">{{ task.title }}</mat-checkbox>
   <mat-chip-set class="chips">
     @if (task.dueDate) {
