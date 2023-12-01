@@ -1,12 +1,24 @@
 <mat-card matRipple appearance="outlined" class="task-card">
-  <mat-checkbox class="checkbox" [(ngModel)]="task.completed">{{ task.title }}</mat-checkbox>
+  <mat-checkbox class="checkbox" [(ngModel)]="task.completed">
+    {{ task.title }}
+  </mat-checkbox>
   <mat-chip-set class="chips">
     @if (task.dueDate) {
-      <mat-chip>
+      <mat-chip-row (removed)="task.dueDate = null"
+                    (click)="setDueDate(task)"
+                    matTooltip="Due date">
         <fa-icon matChipAvatar [icon]="faCalendar"></fa-icon>
         {{ dueDate | date: 'shortDate' }}
-      </mat-chip>
+        <button matChipRemove>
+          <fa-icon [icon]="faCircleXmark"></fa-icon>
+        </button>
+      </mat-chip-row>
+    } @else {
+      <mat-chip-row (click)="setDueDate(task)">
+        <fa-icon matChipAvatar [icon]="faCalendarPlus"></fa-icon>
+                Add due date
+      </mat-chip-row>
     }
   </mat-chip-set>
-  <fa-icon class="angle-decorator" [icon]="faAngleRight" size="2x"></fa-icon>
+  <fa-icon class="angle-decorator" [icon]="faAngleRight" size="lg"></fa-icon>
 </mat-card>

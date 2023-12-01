@@ -10,4 +10,4 @@ max_line_length = off
 indent_size = 2
 indent_style = space
 ij_continuation_indent_size = 2
-tab_width = 2
+tab_width = 4

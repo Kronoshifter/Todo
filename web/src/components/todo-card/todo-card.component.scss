@@ -21,10 +21,6 @@
   background-color: mat.get-theme-color(app.$app-dark-theme, background, hover);
 }
 
-.task-card:active {
-  background-color: mat.get-theme-color(app.$app-dark-theme, background, active);
-}
-
 .checkbox {
   grid-area: checkbox;
 }
@@ -37,3 +33,5 @@
   grid-area: decorator;
   justify-self: end;
 }
+
+
