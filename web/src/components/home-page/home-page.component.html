@@ -9,9 +9,5 @@
 
   <mat-divider></mat-divider>
 
-  <div class="task-list">
-    @for (task of tasks; track task.id) {
-      <todo-card [task]="task"></todo-card>
-    }
-  </div>
+  <todo-list [tasks]="tasks" (taskSelected)="openTask($event)"></todo-list>
 </div>

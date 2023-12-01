@@ -1,1 +1,5 @@
-<p>todo-list works!</p>
+<div class="task-list">
+  @for (task of tasks; track task.id) {
+    <todo-card [task]="task" (click)="selectTask(task)"></todo-card>
+  }
+</div>

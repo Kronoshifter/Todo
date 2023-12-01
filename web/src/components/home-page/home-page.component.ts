@@ -12,11 +12,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { MatListModule } from '@angular/material/list'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { TodoListComponent } from '../todo-list/todo-list.component'
 
 @Component({
   selector: 'home-page',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatCardModule, AsyncPipe, TodoCardComponent, MatListModule, FaIconComponent],
+  imports: [CommonModule, MatButtonModule, MatCardModule, AsyncPipe, TodoCardComponent, MatListModule, FaIconComponent, TodoListComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
@@ -84,6 +85,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
 
     this.tasks.push(task)
+  }
+
+  openTask(task: TodoTask) {
+
   }
 
   showSnackbar(message: string) {
