@@ -1,5 +1,11 @@
-<div class="task-list">
+<div cdkDropList class="task-list" (cdkDropListDropped)="dropTask($event)">
   @for (task of tasks; track task.id) {
-    <todo-card [task]="task" (click)="selectTask(task)"></todo-card>
+    <todo-card [task]="task"
+               (click)="selectTask(task)"
+               cdkDragLockAxis="y"
+               cdkDrag>
+    </todo-card>
+  } @empty {
+    <mat-card> You're all done! </mat-card>
   }
 </div>
