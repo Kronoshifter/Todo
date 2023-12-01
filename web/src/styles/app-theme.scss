@@ -17,8 +17,10 @@ $app-light-theme: mat.define-light-theme((
   ),
 ));
 
+$app-theme: $app-dark-theme;
 @include mat.all-component-themes($app-dark-theme);
 
 @media (prefers-color-scheme: light) {
+  $app-theme: $app-light-theme;
   @include mat.all-component-colors($app-light-theme);
 }

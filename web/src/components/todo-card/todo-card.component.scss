@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@use 'app-theme' as app;
+@use 'app-theme' as theme;
 
 .task-card {
   display: grid;
@@ -18,11 +18,16 @@
 }
 
 .task-card:hover {
-  background-color: mat.get-theme-color(app.$app-dark-theme, background, hover);
+  background-color: mat.get-theme-color(theme.$app-theme, background, hover);
 }
 
-.task-card:active {
+.task-card:active:not(.completed) {
   background-color: var(--background-active);
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 50%;
 }
 
 .checkbox {
