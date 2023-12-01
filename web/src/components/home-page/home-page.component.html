@@ -1,13 +1,10 @@
-<div class="page-wrapper column">
-  <h1>You made it!</h1>
-  <button mat-flat-button color="primary" (click)="logout()">
-    Logout
-  </button>
-  <button mat-flat-button (click)="addTask()">
-    <fa-icon [icon]="faPlus"></fa-icon>
-  </button>
-
-  <mat-divider></mat-divider>
+<div class="page-wrapper">
+  <div class="column center">
+<!--    TODO: add input to add new task-->
+    <button mat-flat-button (click)="addTask()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+    </button>
+  </div>
 
   <todo-list [tasks]="tasks" (taskSelected)="openTask($event)"></todo-list>
 </div>

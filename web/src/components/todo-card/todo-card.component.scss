@@ -21,6 +21,10 @@
   background-color: mat.get-theme-color(app.$app-dark-theme, background, hover);
 }
 
+.task-card:active {
+  background-color: var(--background-active);
+}
+
 .checkbox {
   grid-area: checkbox;
 }
@@ -34,4 +38,4 @@
   justify-self: end;
 }
 
-
+// TODO: disable ripple when clicking on child elements

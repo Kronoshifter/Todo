@@ -1,4 +1,5 @@
-<mat-card matRipple appearance="outlined" class="task-card">
+<mat-card matRipple [matRippleDisabled]="true" appearance="outlined" class="task-card">
+<!--  TODO: cross out text when box is checked-->
   <mat-checkbox class="checkbox" [(ngModel)]="task.completed">
     {{ task.title }}
   </mat-checkbox>

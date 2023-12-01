@@ -15,3 +15,31 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .column {
   @include alignment.column;
 }
+
+.stretch {
+  @include alignment.stretch;
+}
+
+.align-center {
+  @include alignment.align-center;
+}
+
+.justify-center {
+  @include alignment.justify-center;
+}
+
+.center {
+  @include alignment.center;
+}
+
+.space-between {
+  @include alignment.space-between;
+}
+
+.space-around {
+  @include alignment.space-around;
+}
+
+.space-evenly {
+  @include alignment.space-evenly;
+}
