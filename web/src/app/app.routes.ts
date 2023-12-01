@@ -13,6 +13,5 @@ export const routes: Routes = [
       { path: '**', redirectTo: '/todo-list' },
     ]
   },
-  // { path: '', redirectTo: '/todo-list', pathMatch: 'full' },
   { path: '**', redirectTo: '' },
 ]

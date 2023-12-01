@@ -1,33 +1,35 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { AsyncPipe, CommonModule } from '@angular/common'
 import { MatButtonModule } from '@angular/material/button'
 import { NetworkAPIService } from '../../services/network-api.service'
 import { Router } from '@angular/router'
 import { TodoTask } from '../../model/todo-task'
 import { Observable, Subscription } from 'rxjs'
 import { MatCardModule } from '@angular/material/card'
-import { AsyncPipe} from '@angular/common'
 import { MatSnackBar } from '@angular/material/snack-bar'
+import { TodoCardComponent } from '../todo-card/todo-card.component'
+import { v4 as uuidv4 } from 'uuid'
+import { MatListModule } from '@angular/material/list'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'home-page',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatCardModule, AsyncPipe],
+  imports: [CommonModule, MatButtonModule, MatCardModule, AsyncPipe, TodoCardComponent, MatListModule, FaIconComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
 export class HomePageComponent implements OnInit, OnDestroy {
-  title = 'Kronos Todo'
 
   tasks: TodoTask[] = []
-  tasks$: Observable<TodoTask[]>
 
   private sub: Subscription
 
   constructor(
     private api: NetworkAPIService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
 
   }
@@ -62,10 +64,31 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
   fetchTasks() {
-    this.tasks$ = this.api.fetchTasks()
+    this.sub = this.api.fetchTasks().subscribe({
+      next: (res) => {
+        this.tasks = [...res]
+      },
+      error: (err) => {
+        this.showSnackbar(`Error: ${err.message}`)
+      },
+    })
+  }
+
+  addTask() {
+    const task: TodoTask = {
+      id: uuidv4(),
+      title: 'New Task',
+      description: 'Description',
+      completed: false,
+      dueDate: Date.now(),
+    }
+
+    this.tasks.push(task)
   }
 
   showSnackbar(message: string) {
-    this.snackBar.open(message, 'dismiss', { duration: 3000, })
+    this.snackBar.open(message, 'dismiss', { duration: 3000 })
   }
+
+  protected readonly faPlus = faPlus
 }

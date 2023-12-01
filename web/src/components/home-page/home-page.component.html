@@ -1,14 +1,17 @@
-<div class="page-wrapper">
+<div class="page-wrapper column">
   <h1>You made it!</h1>
   <button mat-flat-button color="primary" (click)="logout()">
     Logout
   </button>
+  <button mat-flat-button (click)="addTask()">
+    <fa-icon [icon]="faPlus"></fa-icon>
+  </button>
+
+  <mat-divider></mat-divider>
 
   <div class="task-list">
-    @for (task of tasks$ | async;track task.id) {
-      <mat-card>
-        {{ task.title }}
-      </mat-card>
+    @for (task of tasks; track task.id) {
+      <todo-card [task]="task"></todo-card>
     }
   </div>
 </div>
