@@ -1,15 +1,4 @@
-@use "alignment";
-
-//.task-card {
-//  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-//  justify-content: center;
-//  align-items: stretch;
-//}
-//
-//.angle-decorator {
-//  align-self: center;
-//  margin-left: auto;
-//}
+@use '@angular/material' as mat;
 
 .task-card {
   display: grid;
@@ -25,6 +14,15 @@
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
   justify-items: start;
   align-items: center;
+}
+
+.task-card:hover {
+  background-color: var(--background-hover);
+}
+
+// add hover effects to the card using theme values
+.task-card:active {
+  background-color: var(--background-active);
 }
 
 .checkbox {
