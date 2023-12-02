@@ -19,13 +19,16 @@ import { MatTooltipModule } from '@angular/material/tooltip'
   styleUrl: './todo-card.component.scss',
 })
 export class TodoCardComponent {
-  @Input() task!: TodoTask
+  @Input({required: true}) task!: TodoTask
   @Output() completeChange = new EventEmitter<TodoTask>()
+  @Output() selected= new EventEmitter<TodoTask>()
 
   protected readonly faAngleRight = faAngleRight
   protected readonly faCalendar = faCalendar
   protected readonly faCalendarPlus = faCalendarPlus
   protected readonly faCircleXmark = faCircleXmark
+
+  isPressed = false
 
   get dueDate(): Date | null {
     if (this.task.dueDate) {
@@ -38,6 +41,12 @@ export class TodoCardComponent {
     // TODO: Add date picker
     if (!task.dueDate) {
       task.dueDate = Date.now()
+    }
+  }
+
+  handlePress(event: MouseEvent) {
+    if (event.currentTarget === event.target) {
+      this.isPressed = true
     }
   }
 }

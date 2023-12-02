@@ -16,15 +16,15 @@ import { NgAutoAnimateDirective } from 'ng-auto-animate'
 })
 export class TodoListComponent {
 
-  @Input() tasks!: TodoTask[]
-  @Output() taskSelected = new EventEmitter<TodoTask>()
+  @Input({required: true}) tasks!: TodoTask[]
+  @Output() select = new EventEmitter<TodoTask>()
 
   constructor() {
 
   }
 
-  selectTask(task: TodoTask) {
-    this.taskSelected.emit(task)
+  selectTask(task: TodoTask, event: MouseEvent) {
+    this.select.emit(task)
   }
 
 }
