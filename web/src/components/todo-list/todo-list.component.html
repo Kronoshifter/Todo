@@ -1,10 +1,7 @@
-<div cdkDropList class="task-list" (cdkDropListDropped)="dropTask($event)">
-  @for (task of tasks; track task.id) {
+<div class="task-list" auto-animate>
+  @for (task of tasks | sortByComplete; track task.id) {
     <todo-card [task]="task"
-               (click)="selectTask(task)"
-               cdkDragLockAxis="y"
-               cdkDrag>
-    </todo-card>
+               (click)="selectTask(task)"></todo-card>
   } @empty {
     <mat-card class="center" appearance="outlined"> You're all done! </mat-card>
   }

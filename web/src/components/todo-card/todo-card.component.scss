@@ -21,12 +21,15 @@
   background-color: mat.get-theme-color(theme.$app-theme, background, hover);
 }
 
-.task-card:active:not(.completed) {
+.task-card:active:not(.disabled) {
   background-color: var(--background-active);
 }
 
-.completed {
+.strike-through {
   text-decoration: line-through;
+}
+
+.disabled {
   opacity: 50%;
 }
 

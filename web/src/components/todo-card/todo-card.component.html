@@ -2,18 +2,20 @@
           [matRippleDisabled]="true"
           appearance="outlined"
           class="task-card"
-          [ngClass]="{'completed': task.completed}">
-<!--  TODO: cross out text when box is checked-->
+          [ngClass]="{'disabled': task.completed}">
   <mat-checkbox class="checkbox"
-                [ngClass]="{'completed': task.completed}"
+                [ngClass]="{'strike-through': task.completed}"
                 [(ngModel)]="task.completed"
-                (click)="$event.stopPropagation()">
+                (change)="completeChange.emit(task)"
+                (click)="$event.stopImmediatePropagation()"
+                (mousedown)="$event.stopImmediatePropagation()">
     {{ task.title }}
   </mat-checkbox>
   <mat-chip-set class="chips">
     @if (task.dueDate) {
       <mat-chip-row (removed)="task.dueDate = null"
-                    (click)="setDueDate(task); $event.stopPropagation()"
+                    (click)="setDueDate(task); $event.stopImmediatePropagation()"
+                    (mousedown)="$event.stopImmediatePropagation()"
                     matTooltip="Due date">
         <fa-icon matChipAvatar [icon]="faCalendar"></fa-icon>
         {{ dueDate | date: 'shortDate' }}
@@ -22,7 +24,7 @@
         </button>
       </mat-chip-row>
     } @else {
-      <mat-chip-row (click)="setDueDate(task); $event.stopPropagation()">
+      <mat-chip-row (click)="setDueDate(task); $event.stopImmediatePropagation()">
         <fa-icon matChipAvatar [icon]="faCalendarPlus"></fa-icon>
                 Add due date
       </mat-chip-row>

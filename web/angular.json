@@ -66,10 +66,14 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "web:build:production"
+              "buildTarget": "web:build:production",
+              "proxyConfig": "proxy.conf.json",
+              "port": 12189
             },
             "development": {
-              "buildTarget": "web:build:development"
+              "buildTarget": "web:build:development",
+              "proxyConfig": "proxy.conf.json",
+              "port": 12189
             }
           },
           "defaultConfiguration": "development"

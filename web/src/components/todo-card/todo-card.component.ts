@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TodoTask } from '../../model/todo-task'
 import { MatCardModule } from '@angular/material/card'
@@ -20,6 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip'
 })
 export class TodoCardComponent {
   @Input() task!: TodoTask
+  @Output() completeChange = new EventEmitter<TodoTask>()
 
   protected readonly faAngleRight = faAngleRight
   protected readonly faCalendar = faCalendar
