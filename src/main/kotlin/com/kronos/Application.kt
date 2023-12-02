@@ -1,10 +1,11 @@
 package com.kronos
 
-import com.kronos.plugins.configureServer
-import com.kronos.plugins.configureTaskApi
 import com.kronos.plugins.configureSecurity
 import com.kronos.plugins.configureSerialization
+import com.kronos.plugins.configureServer
+import com.kronos.plugins.configureTaskApi
 import com.kronos.utils.FakeTaskDatabase
+import com.kronos.utils.TaskDatabase
 import com.kronos.utils.TodoConfig
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -21,6 +22,7 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 fun Application.core() {
   val configModule = module {
     single { TodoConfig(environment) }
+    single { TaskDatabase() }
     single { FakeTaskDatabase(19551105) }
   }
 

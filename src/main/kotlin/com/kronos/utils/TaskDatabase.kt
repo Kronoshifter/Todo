@@ -19,6 +19,9 @@ sealed interface Database {
   fun deleteTask(id: String): Result<Boolean, DatabaseError>
 }
 
+// This is an abstraction layer for the database
+// For the time being, it allows me to simulate a real database
+// without having to set one up
 open class TaskDatabase : Database {
   protected open val tasks = mutableListOf<TodoTask>()
 

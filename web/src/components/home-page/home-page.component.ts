@@ -27,7 +27,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   tasks: TodoTask[] = []
   newTaskTitle = ''
   protected readonly faPlus = faPlus
-  private sub: Subscription
+  private sub: Subscription = new Subscription()
 
   constructor(
     private api: NetworkAPIService,
@@ -48,6 +48,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
   }
 
+  //API calls
+
   logout() {
     this.api.logout().subscribe((res) => {
       console.log(res)
@@ -67,7 +69,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
   fetchTasks() {
-    this.sub = this.api.fetchTasks().subscribe({
+    const taskSub = this.api.fetchTasks().subscribe({
       next: (res) => {
         this.tasks = [...res]
       },
@@ -75,6 +77,22 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this.showSnackbar(`Error: ${err.message}`)
       },
     })
+
+    this.sub.add(taskSub)
+  }
+
+  addTask(task: TodoTask) {
+    const taskSub = this.api.createTask(task).subscribe({
+      next: (res) => {
+        this.tasks.unshift(res)
+        this.resetInput()
+      },
+      error: (err) => {
+        this.showSnackbar(`Error: ${err.message}`)
+      },
+    })
+
+    this.sub.add(taskSub)
   }
 
   newTask() {
@@ -85,8 +103,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
         completed: false,
       }
 
-      this.tasks.unshift(task)
-      this.resetInput()
+      this.addTask(task)
     } else {
       this.showSnackbar('Please enter a task title')
     }

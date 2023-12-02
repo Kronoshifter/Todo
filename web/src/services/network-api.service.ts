@@ -74,6 +74,15 @@ export class NetworkAPIService {
   }
 
   //TODO: implement createTask
+  createTask(task: TodoTask) {
+    return this.http.post<TodoTask>('/api/task', task, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.session.authHeadersMap()
+      },
+    })
+  }
+
   //TODO: implement updateTask
   //TODO: implement deleteTask
 }

@@ -3,6 +3,6 @@
     <todo-card [task]="task"
                (click)="selectTask(task)"></todo-card>
   } @empty {
-    <mat-card class="center" appearance="outlined"> You're all done! </mat-card>
+    <mat-card class="empty-card center" appearance="outlined"> No tasks. You're all caught up! </mat-card>
   }
 </div>

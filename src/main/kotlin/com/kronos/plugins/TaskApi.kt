@@ -2,7 +2,7 @@ package com.kronos.plugins
 
 import com.kronos.configureApi
 import com.kronos.model.TodoTask
-import com.kronos.utils.FakeTaskDatabase
+import com.kronos.utils.TaskDatabase
 import com.kronos.utils.guard
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -29,7 +29,8 @@ fun Application.configureTaskApi() {
 }
 
 fun Route.taskApi() {
-  val database by inject<FakeTaskDatabase>()
+//  val database by inject<FakeTaskDatabase>()
+  val database by inject<TaskDatabase>()
 
   todoAuthentication{
     route("/task") {
@@ -44,12 +45,13 @@ fun Route.taskApi() {
 
       post {
         // TODO use real data
-        val req = call.receive<TodoTaskUpdateRequest>()
-        database.insertTask(req.task).guard {
+        val task = call.receive<TodoTask>()
+        database.insertTask(task).guard {
           call.respond(HttpStatusCode.BadRequest, it.message)
           return@post
         }
-        call.respond(HttpStatusCode.OK)
+
+        call.respond(HttpStatusCode.OK, task)
       }
 
       route("/{id}") {
