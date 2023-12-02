@@ -1,8 +1,9 @@
 export interface TodoTask {
   id: string
   title: string
-  description: string
   completed: boolean
+  // tags: string
+  description?: string
   dueDate?: number
 }
 

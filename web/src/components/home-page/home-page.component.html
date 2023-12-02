@@ -1,10 +1,14 @@
 <div class="page-wrapper">
   <div class="column center">
-<!--    TODO: add input to add new task-->
-    <button mat-flat-button (click)="addTask()">
-      <fa-icon [icon]="faPlus"></fa-icon>
-    </button>
-  </div>
 
-  <todo-list [tasks]="tasks" (taskSelected)="openTask($event)"></todo-list>
+    <mat-form-field>
+      <mat-label>New Task</mat-label>
+      <input matInput [(ngModel)]="newTaskTitle" (keydown.enter)="newTask()">
+      <button mat-icon-button matSuffix (click)="newTask()">
+        <fa-icon [icon]="faPlus"></fa-icon>
+      </button>
+    </mat-form-field>
+
+    <todo-list [tasks]="tasks" (taskSelected)="openTask($event)"></todo-list>
+  </div>
 </div>

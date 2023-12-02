@@ -13,18 +13,20 @@ import { MatListModule } from '@angular/material/list'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { TodoListComponent } from '../todo-list/todo-list.component'
+import { MatInputModule } from '@angular/material/input'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'home-page',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatCardModule, AsyncPipe, TodoCardComponent, MatListModule, FaIconComponent, TodoListComponent],
+  imports: [CommonModule, MatButtonModule, MatCardModule, AsyncPipe, TodoCardComponent, MatListModule, FaIconComponent, TodoListComponent, MatInputModule, FormsModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
 export class HomePageComponent implements OnInit, OnDestroy {
-
   tasks: TodoTask[] = []
-
+  newTaskTitle = ''
+  protected readonly faPlus = faPlus
   private sub: Subscription
 
   constructor(
@@ -75,25 +77,30 @@ export class HomePageComponent implements OnInit, OnDestroy {
     })
   }
 
-  addTask() {
-    const task: TodoTask = {
-      id: uuidv4(),
-      title: 'New Task',
-      description: 'Description',
-      completed: false,
-      dueDate: Date.now(),
-    }
+  newTask() {
+    if (this.newTaskTitle) {
+      const task: TodoTask = {
+        id: uuidv4(),
+        title: this.newTaskTitle,
+        completed: false,
+      }
 
-    this.tasks.push(task)
+      this.tasks.unshift(task)
+      this.resetInput()
+    } else {
+      this.showSnackbar('Please enter a task title')
+    }
   }
 
   openTask(task: TodoTask) {
 
   }
 
-  showSnackbar(message: string) {
-    this.snackBar.open(message, 'dismiss', { duration: 3000 })
+  private resetInput() {
+    this.newTaskTitle = ''
   }
 
-  protected readonly faPlus = faPlus
+  private showSnackbar(message: string) {
+    this.snackBar.open(message, 'dismiss', { duration: 3000 })
+  }
 }
