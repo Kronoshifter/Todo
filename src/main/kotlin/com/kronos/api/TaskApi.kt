@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.reflect.*
 import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
 
@@ -33,7 +34,7 @@ fun Route.taskApi() {
 //  val database by inject<FakeTaskDatabase>()
   val database by inject<TaskDatabase>()
 
-  todoAuthentication{
+  todoAuthentication {
     route("/task") {
       get {
         // TODO use real data
@@ -48,11 +49,13 @@ fun Route.taskApi() {
       post {
         // TODO use real data
         val task = call.receive<TodoTask>()
+        call.application.log.debug("Received task: {}", task)
         database.insertTask(task).guard {
           call.respond(HttpStatusCode.BadRequest, it.message)
           return@post
         }
 
+        call.response.headers.appendIfAbsent("Content-Type", "application/json")
         call.respond(HttpStatusCode.OK, task)
       }
 

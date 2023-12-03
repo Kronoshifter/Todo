@@ -57,17 +57,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
     })
   }
 
-  fetchTaskResponse() {
-    this.sub = this.api.fetchTaskResponse().subscribe({
-      next: (res) => {
-        this.tasks = [...res.tasks]
-      },
-      error: (err) => {
-        this.showSnackbar(`Error: ${err.message}`)
-      },
-    })
-  }
-
   fetchTasks() {
     const taskSub = this.api.fetchTasks().subscribe({
       next: (res) => {
@@ -84,8 +73,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
   addTask(task: TodoTask) {
     const taskSub = this.api.createTask(task).subscribe({
       next: (res) => {
-        this.tasks.unshift(res)
         this.resetInput()
+        this.fetchTasks()
       },
       error: (err) => {
         this.showSnackbar(`Error: ${err.message}`)
@@ -101,6 +90,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
         id: uuidv4(),
         title: this.newTaskTitle,
         completed: false,
+        tags: [],
       }
 
       this.addTask(task)

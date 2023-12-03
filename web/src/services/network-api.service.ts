@@ -74,7 +74,7 @@ export class NetworkAPIService {
   }
 
   createTask(task: TodoTask) {
-    return this.http.post<TodoTask>('/api/task', task, {
+    return this.http.post('/api/task', task, {
       headers: {
         'Content-Type': 'application/json',
         ...this.session.authHeadersMap()
@@ -85,7 +85,6 @@ export class NetworkAPIService {
   updateTask(task: TodoTask) {
     return this.http.put<TodoTask>('/api/task', task, {
       headers: {
-        'Content-Type': 'application/json',
         ...this.session.authHeadersMap()
       },
     })
@@ -94,7 +93,6 @@ export class NetworkAPIService {
   deleteTask(task: TodoTask) {
     return this.http.delete('/api/task', {
       headers: {
-        'Content-Type': 'application/json',
         ...this.session.authHeadersMap()
       },
     })
