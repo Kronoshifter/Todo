@@ -1,10 +1,8 @@
-package com.kronos.utils
+package com.kronos.database
 
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.andThen
-import com.github.michaelbull.result.toResultOr
+import com.github.michaelbull.result.*
 import com.kronos.model.TodoTask
+import com.kronos.utils.putIfPresent
 import io.github.serpro69.kfaker.faker
 import kotlinx.serialization.Serializable
 import java.time.Duration
@@ -23,30 +21,34 @@ sealed interface Database {
 // For the time being, it allows me to simulate a real database
 // without having to set one up
 open class TaskDatabase : Database {
-  protected open val tasks = mutableListOf<TodoTask>()
+  protected open val tasks = mutableMapOf<String, TodoTask>()
 
   override fun taskList(): List<TodoTask> {
-    return tasks.toList()
+    return tasks.values.toList()
   }
 
   override fun getTask(id: String): Result<TodoTask, DatabaseError> {
-    return tasks.find { it.id == id }.toResultOr { DatabaseError("Task not found") }
+    return tasks[id].toResultOr { DatabaseError("Task not found") }
   }
 
   override fun insertTask(task: TodoTask): Result<Boolean, DatabaseError> {
-    return Ok(tasks.add(task))
+    return when (tasks.putIfAbsent(task.id, task)) {
+      null -> Ok(true)
+      else -> Err(DatabaseError("Task already exists"))
+    }
   }
 
   override fun updateTask(task: TodoTask): Result<Boolean, DatabaseError> {
-    return tasks.indexOfFirst { it.id == task.id }.takeIf { it >= 0 }?.let { index ->
-      tasks[index] = task
-      return@let true
-    }.toResultOr { DatabaseError("Task could not be updated") }
+    return when (tasks.putIfPresent(task.id, task)) {
+      null -> Err(DatabaseError("Task does not exist"))
+      else -> Ok(true)
+    }
   }
 
   override fun deleteTask(id: String): Result<Boolean, DatabaseError> {
-    return getTask(id).andThen {
-      tasks.remove(it).toResultOr { DatabaseError("Task could not be deleted") }
+    return when (tasks.remove(id)) {
+      null -> Err(DatabaseError("Task does not exist"))
+      else -> Ok(true)
     }
   }
 }
@@ -59,7 +61,8 @@ class FakeTaskDatabase(private val seed: Long? = null) : TaskDatabase() {
     }
   }
 
-  override val tasks: MutableList<TodoTask> = MutableList(10) {
+  override val tasks: MutableMap<String, TodoTask> = mutableMapOf<String, TodoTask>().apply {
+
     faker.randomProvider.randomClassInstance<TodoTask>() {
       namedParameterGenerator("id") {
         faker.random.nextUUID()
@@ -77,8 +80,13 @@ class FakeTaskDatabase(private val seed: Long? = null) : TaskDatabase() {
         Instant.now().plus(Duration.ofDays(3)).takeIf { faker.random.nextInt(0, 3) == 0 }
       }
     }
-  }
 
+    repeat(10) {
+      faker.randomProvider.randomClassInstance<TodoTask>().also {
+        put(it.id, it)
+      }
+    }
+  }
 
 }
 

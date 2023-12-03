@@ -1,7 +1,8 @@
-package com.kronos.plugins
+package com.kronos.api
 
 import com.kronos.configureApi
 import com.kronos.model.TodoTask
+import com.kronos.plugins.todoAuthentication
 import com.kronos.utils.TaskDatabase
 import com.kronos.utils.guard
 import io.ktor.http.*
@@ -62,7 +63,8 @@ fun Route.taskApi() {
             call.respond(HttpStatusCode.NotFound, it.message)
             return@get
           }
-          call.respond(TodoTaskResponse(listOf(task)))
+
+          call.respond(task)
         }
 
         delete {
@@ -72,6 +74,7 @@ fun Route.taskApi() {
             call.respond(HttpStatusCode.NotFound, it.message)
             return@delete
           }
+
           call.respond(HttpStatusCode.OK)
         }
 
@@ -82,6 +85,7 @@ fun Route.taskApi() {
             call.respond(HttpStatusCode.NotFound, it.message)
             return@put
           }
+
           call.respond(HttpStatusCode.OK)
         }
       }
