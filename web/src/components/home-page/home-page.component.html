@@ -1,7 +1,6 @@
-<div class="page-wrapper">
-  <div class="column center">
-
-    <mat-form-field>
+<div class="page-wrapper column home-page">
+  <div class="column align-center stretch home-page limit">
+    <mat-form-field class="home-page">
       <mat-label>New Task</mat-label>
       <input matInput [(ngModel)]="newTaskTitle" (keydown.enter)="newTask()">
       <button mat-icon-button matSuffix (click)="newTask()">
