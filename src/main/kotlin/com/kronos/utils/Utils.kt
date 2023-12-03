@@ -17,3 +17,5 @@ inline fun<V, E> Result<V, E>.guard(block: (E) -> Nothing): V {
     is Err -> block(this.error)
   }
 }
+
+fun<K, V> MutableMap<K, V>.putIfPresent(key: K, value: V): V? = if (this.containsKey(key)) this.put(key, value) else null

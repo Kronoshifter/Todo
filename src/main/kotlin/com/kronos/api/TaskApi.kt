@@ -3,7 +3,7 @@ package com.kronos.api
 import com.kronos.configureApi
 import com.kronos.model.TodoTask
 import com.kronos.plugins.todoAuthentication
-import com.kronos.utils.TaskDatabase
+import com.kronos.database.TaskDatabase
 import com.kronos.utils.guard
 import io.ktor.http.*
 import io.ktor.server.application.*

@@ -1,6 +1,6 @@
 package com.kronos
 
-import com.kronos.plugins.*
+import com.kronos.api.configureTaskApi
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
