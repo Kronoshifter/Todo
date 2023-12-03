@@ -37,6 +37,7 @@ fun Route.taskApi() {
     route("/task") {
       get {
         // TODO use real data
+        call.response.headers.appendIfAbsent("Content-Type", "application/json")
         call.respond(database.taskList())
       }
 
@@ -64,6 +65,7 @@ fun Route.taskApi() {
             return@get
           }
 
+          call.response.headers.appendIfAbsent("Content-Type", "application/json")
           call.respond(task)
         }
 
@@ -75,6 +77,7 @@ fun Route.taskApi() {
             return@delete
           }
 
+          call.response.headers.appendIfAbsent("Content-Type", "application/json")
           call.respond(HttpStatusCode.OK)
         }
 
@@ -86,6 +89,7 @@ fun Route.taskApi() {
             return@put
           }
 
+          call.response.headers.appendIfAbsent("Content-Type", "application/json")
           call.respond(HttpStatusCode.OK)
         }
       }
