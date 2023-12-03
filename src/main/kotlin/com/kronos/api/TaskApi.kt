@@ -80,8 +80,8 @@ fun Route.taskApi() {
 
         put {
           // TODO use real data
-          val req = call.receive<TodoTaskUpdateRequest>()
-          database.updateTask(req.task).guard {
+          val task = call.receive<TodoTask>()
+          database.updateTask(task).guard {
             call.respond(HttpStatusCode.NotFound, it.message)
             return@put
           }
