@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import {Component, OnDestroy, OnInit} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { NetworkAPIService } from '../../services/network-api.service'
 import { Router } from '@angular/router'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatButtonModule } from '@angular/material/button'
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-login-page',
@@ -12,7 +13,9 @@ import { MatButtonModule } from '@angular/material/button'
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit, OnDestroy {
+
+  private sub = new Subscription()
 
   constructor(
     private api: NetworkAPIService,
@@ -21,14 +24,18 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.api.login('admin', 'admin').subscribe((res) => {
-    //   this.router.navigate(['/todo-list'])
-    // })
+    this.login()
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe()
   }
 
   login() {
-    this.api.login('admin', 'admin').subscribe((res) => {
+    const loginSub = this.api.login().subscribe((res) => {
       this.router.navigate(['/todo-list'])
     })
+
+    this.sub.add(loginSub)
   }
 }

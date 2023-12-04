@@ -18,11 +18,10 @@ export class NetworkAPIService {
   handleError(error: HttpErrorResponse) {
     if (!error.ok) {
       const message = `Error ${error.status}: ${error.error}`
-      throw new Error(message)
-    }
+      console.log(message)}
   }
 
-  login(username: string, password: string): Observable<HttpResponse<string>> {
+  login(): Observable<HttpResponse<string>> {
     return this.http.get('/api/login', {
       responseType: 'text',
       observe: 'response',
@@ -32,7 +31,6 @@ export class NetworkAPIService {
         return it
       }),
       tap((res) => {
-        this.session.userId = '123abc'
         this.session.session = res.headers.get('x-session-id')
       }),
     )
@@ -49,7 +47,6 @@ export class NetworkAPIService {
         return it
       }),
       tap((res) => {
-        this.session.userId = null
         this.session.session = null
       }),
     )
@@ -61,7 +58,14 @@ export class NetworkAPIService {
         'Accept': 'application/json',
         ...this.session.authHeadersMap()
       },
-    })
+    }).pipe(
+      catchError((err, it) => {
+        if (err.status === 401) {
+          this.session.logout()
+        }
+        return it
+      })
+    )
   }
 
   fetchTaskResponse(): Observable<TodoTaskResponse> {

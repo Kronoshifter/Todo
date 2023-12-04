@@ -46,21 +46,21 @@ fun Application.configureSecurity() {
       }
     }
 
-    basic("todo-basic") {
-      realm = "Kronos"
-      // TODO remove as soon as JWT is implemented
-      validate { credentials ->
-        if (config.devMode) {
-          val validHosts = setOf("localhost", "127.0.0.1")
-          if (request.origin.remoteHost.lowercase() !in validHosts) {
-            application.log.warn("Basic auth from remote addresses is not allowed in dev mode")
-            return@validate null
-          }
-        }
-
-        TodoAuth("123abc")
-      }
-    }
+//    basic("todo-basic") {
+//      realm = "Kronos"
+//      // TODO remove as soon as JWT is implemented
+//      validate { credentials ->
+//        if (config.devMode) {
+//          val validHosts = setOf("localhost", "127.0.0.1")
+//          if (request.origin.remoteHost.lowercase() !in validHosts) {
+//            application.log.warn("Basic auth from remote addresses is not allowed in dev mode")
+//            return@validate null
+//          }
+//        }
+//
+//        TodoAuth("123abc")
+//      }
+//    }
 
     //TODO implement JWT
   }
@@ -73,17 +73,9 @@ fun Application.configureSecurity() {
 private fun Route.loginApi() {
   // TODO refactor when JWT is implemented
   get("/login") {
-    val session = TodoSession(TodoAuth("123abc"))
+    val session = TodoSession(TodoAuth(UUID.randomUUID().toString()))
     call.sessions.set(session)
     call.respondText("User logged in: ${session.auth.userId}")
-  }
-
-  todoAuthentication{
-    get("/logout") {
-      val user = call.sessions.get<TodoSession>()?.auth?.userId
-      call.sessions.clear<TodoSession>()
-      call.respondText("User logged out: $user")
-    }
   }
 
   todoOptionalAuthentication {
@@ -99,9 +91,9 @@ private fun Route.loginApi() {
 }
 
 fun Route.todoAuthentication(build: Route.() -> Unit) {
-  authenticate("todo-basic", "todo-session", build = build)
+  authenticate("todo-session", build = build)
 }
 
 fun Route.todoOptionalAuthentication(build: Route.() -> Unit) {
-  authenticate("todo-basic", "todo-session", optional = true, build = build)
+  authenticate("todo-session", optional = true, build = build)
 }

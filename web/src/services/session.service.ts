@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router'
-import { HttpHeaders } from '@angular/common/http'
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree} from '@angular/router'
+import {HttpHeaders} from '@angular/common/http'
 
 @Injectable({
   providedIn: 'root'
@@ -28,33 +28,25 @@ export class SessionService {
     }
   }
 
-  get userId(): string | null {
-    return this._userId;
-  }
-
-  set userId(userId: string | null) {
-    this._userId = userId;
-    if (userId) {
-      sessionStorage['userid'] = userId;
-    } else {
-      delete sessionStorage['userid'];
-    }
-  }
-
   get isAuthenticated(): boolean {
     return !!this.session
   }
 
   authHeaders(): HttpHeaders {
     return new HttpHeaders({
-        'x-session-id': this.session
-      })
+      'x-session-id': this.session
+    })
   }
 
   authHeadersMap(): Record<string, string> {
     return {
       'x-session-id': this.session,
     }
+  }
+
+  logout() {
+    this.session = null
+    this.router.navigate(['/login']).catch(reason => { console.log(reason) })
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree> {
@@ -68,6 +60,7 @@ export class SessionService {
   private async authenticate(): Promise<boolean | UrlTree> {
     const auth = this.isAuthenticated
     if (!auth) {
+      this.logout()
       return this.router.createUrlTree(['/login'])
     }
 
