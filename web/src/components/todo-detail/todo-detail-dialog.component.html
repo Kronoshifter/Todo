@@ -1,0 +1,27 @@
+<div class="task-detail-dialog">
+  <h2 mat-dialog-title>Edit Task - {{ data.oldTask.title }}</h2>
+  <mat-dialog-content class="content">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput [(ngModel)]="newTask.title" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput [(ngModel)]="newTask.description"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Due Date</mat-label>
+      <input matInput type="date" [matDatepicker]="picker"  [(ngModel)]="newTask.dueDate"/>
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker">
+        <fa-icon [icon]="faCalendarDay"></fa-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="warn" (click)="delete()">Delete</button>
+    <button mat-flat-button color="primary" (click)="save()">Save</button>
+  </mat-dialog-actions>
+</div>

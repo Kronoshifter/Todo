@@ -23,10 +23,6 @@
   background: mat.get-theme-color(theme.$app-theme, background, hover);
 }
 
-//.task-card:active:not(.disabled) {
-//  background-color: var(--background-active);
-//}
-
 .task-card:where(.pressed) {
   background: var(--background-active);
 }

@@ -5,9 +5,8 @@ import { MatCardModule } from '@angular/material/card'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { FormsModule } from '@angular/forms'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome'
-import { faAngleRight, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
+import {faAngleRight, faCircleXmark, faCalendar, faCalendarPlus, faCalendarDay} from '@fortawesome/free-solid-svg-icons'
 import { MatChipsModule } from '@angular/material/chips'
-import { faCalendar, faCalendarPlus } from '@fortawesome/free-regular-svg-icons'
 import { MatRippleModule } from '@angular/material/core'
 import { MatTooltipModule } from '@angular/material/tooltip'
 
@@ -23,9 +22,9 @@ export class TodoCardComponent {
   @Output() completeChange = new EventEmitter<TodoTask>()
   @Output() selected= new EventEmitter<TodoTask>()
 
-  protected readonly faAngleRight = faAngleRight
-  protected readonly faCalendar = faCalendar
+  protected readonly faCalendarDay = faCalendarDay;
   protected readonly faCalendarPlus = faCalendarPlus
+  protected readonly faAngleRight = faAngleRight
   protected readonly faCircleXmark = faCircleXmark
 
   isPressed = false

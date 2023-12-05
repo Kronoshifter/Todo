@@ -39,7 +39,7 @@ fun Route.taskApi() {
       get {
         // TODO use real data
         call.response.headers.appendIfAbsent("Content-Type", "application/json")
-        call.respond(database.taskList())
+        call.respond(HttpStatusCode.OK, database.taskList())
       }
 
       get("/response") {

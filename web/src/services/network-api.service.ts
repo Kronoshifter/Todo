@@ -87,7 +87,7 @@ export class NetworkAPIService {
   }
 
   updateTask(task: TodoTask) {
-    return this.http.put<TodoTask>('/api/task', task, {
+    return this.http.put<TodoTask>(`/api/task/${task.id}`, task, {
       headers: {
         ...this.session.authHeadersMap()
       },
@@ -95,7 +95,7 @@ export class NetworkAPIService {
   }
 
   deleteTask(task: TodoTask) {
-    return this.http.delete('/api/task', {
+    return this.http.delete(`/api/task/${task.id}`, {
       headers: {
         ...this.session.authHeadersMap()
       },

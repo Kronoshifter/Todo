@@ -18,7 +18,7 @@
       <mat-chip-row (removed)="task.dueDate = null"
                     (click)="setDueDate(task)"
                     matTooltip="Due date">
-        <fa-icon matChipAvatar [icon]="faCalendar"></fa-icon>
+        <fa-icon matChipAvatar [icon]="faCalendarDay"></fa-icon>
         {{ dueDate | date: 'shortDate' }}
         <button matChipRemove>
           <fa-icon [icon]="faCircleXmark"></fa-icon>
@@ -27,7 +27,7 @@
     } @else {
       <mat-chip-row (click)="setDueDate(task)">
         <fa-icon matChipAvatar [icon]="faCalendarPlus"></fa-icon>
-                Add due date
+        Add due date
       </mat-chip-row>
     }
   </mat-chip-set>

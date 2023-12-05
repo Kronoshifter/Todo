@@ -15,6 +15,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { TodoListComponent } from '../todo-list/todo-list.component'
 import { MatInputModule } from '@angular/material/input'
 import { FormsModule } from '@angular/forms'
+import {MatDialog} from "@angular/material/dialog";
+import {TodoDetailDialog, TodoDialogData, TodoDialogResult} from "../todo-detail/todo-detail-dialog.component";
 
 @Component({
   selector: 'home-page',
@@ -31,7 +33,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   constructor(
     private api: NetworkAPIService,
-    private router: Router,
+    private dialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {
 
@@ -49,18 +51,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
   //API calls
-
-  logout() {
-    this.api.logout().subscribe((res) => {
-      console.log(res)
-      this.router.navigate(['/login'])
-    })
-  }
-
-  fetchTasks() {
+  private fetchTasks() {
     const taskSub = this.api.fetchTasks().subscribe({
-      next: (res) => {
-        this.tasks = [...res]
+      next: (tasks) => {
+        this.tasks = [...tasks]
       },
       error: (err) => {
         this.showSnackbar(`Error: ${err.message}`)
@@ -70,7 +64,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     this.sub.add(taskSub)
   }
 
-  addTask(task: TodoTask) {
+  private addTask(task: TodoTask) {
     const taskSub = this.api.createTask(task).subscribe({
       next: (res) => {
         this.resetInput()
@@ -83,6 +77,30 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     this.sub.add(taskSub)
   }
+
+  private updateTask(task: TodoTask) {
+    this.api.updateTask(task).subscribe({
+      next: (res) => {
+        this.fetchTasks()
+      },
+      error: (err) => {
+        this.showSnackbar(`Error: ${err.message}`)
+      },
+    })
+  }
+
+  private deleteTask(task: TodoTask) {
+    this.api.deleteTask(task).subscribe({
+      next: (res) => {
+        this.fetchTasks()
+      },
+      error: (err) => {
+        this.showSnackbar(`Error: ${err.message}`)
+      },
+    })
+  }
+
+  //Helpers
 
   newTask() {
     if (this.newTaskTitle) {
@@ -99,8 +117,38 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  openTask(task: TodoTask) {
 
+  openTask(task: TodoTask) {
+    const data: TodoDialogData = {
+      oldTask: task
+    }
+
+    const ref = this.dialog.open(TodoDetailDialog, {
+      data: data,
+      autoFocus: 'dialog',
+      disableClose: true,
+      width: '500px',
+    })
+
+    const closeSub = ref.afterClosed().subscribe({
+      error: (err) => {
+        this.showSnackbar(`Error: ${err.message}`)
+      },
+      next: (res) => {
+        const result = res as TodoDialogResult
+        if (result) {
+          if (result.action === 'save') {
+            this.updateTask(result.task)
+          } else if (result.action === 'delete') {
+            this.deleteTask(result.task)
+          } else if (result.action === 'cancel') {
+            // do nothing
+          }
+        }
+      },
+    })
+
+    this.sub.add(closeSub)
   }
 
   private resetInput() {
