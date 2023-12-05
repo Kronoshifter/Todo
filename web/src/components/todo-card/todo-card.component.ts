@@ -9,6 +9,7 @@ import {faAngleRight, faCircleXmark, faCalendar, faCalendarPlus, faCalendarDay} 
 import { MatChipsModule } from '@angular/material/chips'
 import { MatRippleModule } from '@angular/material/core'
 import { MatTooltipModule } from '@angular/material/tooltip'
+import { DateTime } from "luxon";
 
 @Component({
   selector: 'todo-card',
@@ -29,9 +30,9 @@ export class TodoCardComponent {
 
   isPressed = false
 
-  get dueDate(): Date | null {
+  get dueDate(): DateTime | null {
     if (this.task.dueDate) {
-      return new Date(this.task.dueDate)
+      return DateTime.fromMillis(this.task.dueDate)
     }
     return null
   }

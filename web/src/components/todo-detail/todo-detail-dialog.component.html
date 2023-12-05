@@ -3,7 +3,7 @@
   <mat-dialog-content class="content">
     <mat-form-field>
       <mat-label>Title</mat-label>
-      <input matInput [(ngModel)]="newTask.title" />
+      <input matInput [(ngModel)]="newTask.title"/>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Description</mat-label>
@@ -11,7 +11,11 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Due Date</mat-label>
-      <input matInput type="date" [matDatepicker]="picker"  [(ngModel)]="newTask.dueDate"/>
+      <input matInput
+             [matDatepicker]="picker"
+             placeholder="MM/DD/YYYY"
+             [formControl]="dueDateForm"
+             name="detail-due-date"/>
       <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="picker">
         <fa-icon [icon]="faCalendarDay"></fa-icon>

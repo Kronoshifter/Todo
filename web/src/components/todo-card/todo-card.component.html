@@ -19,7 +19,7 @@
                     (click)="setDueDate(task)"
                     matTooltip="Due date">
         <fa-icon matChipAvatar [icon]="faCalendarDay"></fa-icon>
-        {{ dueDate | date: 'shortDate' }}
+        {{ dueDate.toMillis() | date: 'shortDate' }}
         <button matChipRemove>
           <fa-icon [icon]="faCircleXmark"></fa-icon>
         </button>
