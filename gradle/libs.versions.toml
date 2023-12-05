@@ -75,3 +75,4 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version = "0.8.1" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+node = { id = "com.github.node-gradle.node", version = "7.0.1" }

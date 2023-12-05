@@ -8,6 +8,7 @@ plugins {
   alias(libs.plugins.ktor)
   alias(libs.plugins.versions)
   alias(libs.plugins.version.catalog.update)
+  alias(libs.plugins.node)
 }
 
 group = "com.kronos"
@@ -62,4 +63,19 @@ dependencies {
 
 tasks.withType<Test>().configureEach {
   useJUnitPlatform()
+}
+
+ktor {
+  docker {
+    jreVersion.set(JavaVersion.VERSION_17)
+    localImageName.set("todo-image")
+    imageTag.set("latest")
+    portMappings.set(listOf(
+      io.ktor.plugin.features.DockerPortMapping(
+        outsideDocker = 12188,
+        insideDocker = 12188,
+        protocol = io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+      )
+    ))
+  }
 }
