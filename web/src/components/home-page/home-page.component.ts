@@ -87,39 +87,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  openTask(task: TodoTask) {
-    const data: TodoDialogData = {
-      oldTask: task
-    }
-
-    const ref = this.dialog.open(TodoDetailDialog, {
-      data: data,
-      autoFocus: 'dialog',
-      disableClose: true,
-      width: '500px',
-    })
-
-    const closeSub = ref.afterClosed().subscribe({
-      next: (res) => {
-        const result = res as TodoDialogResult
-        if (result) {
-          if (result.action === 'save') {
-            this.updateTask(result.task)
-          } else if (result.action === 'delete') {
-            this.deleteTask(result.task)
-          } else if (result.action === 'cancel') {
-            // do nothing
-          }
-        }
-      },
-      error: (err) => {
-        this.showSnackbar(`Error: ${err.message}`)
-      },
-    })
-
-    this.sub.add(closeSub)
-  }
-
   //API calls
 
   private fetchTasks() {
@@ -174,6 +141,39 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
   //Helpers
+
+  openTask(task: TodoTask) {
+    const data: TodoDialogData = {
+      oldTask: task
+    }
+
+    const ref = this.dialog.open(TodoDetailDialog, {
+      data: data,
+      autoFocus: 'dialog',
+      disableClose: true,
+      width: '500px',
+    })
+
+    const closeSub = ref.afterClosed().subscribe({
+      next: (res) => {
+        const result = res as TodoDialogResult
+        if (result) {
+          if (result.action === 'save') {
+            this.updateTask(result.task)
+          } else if (result.action === 'delete') {
+            this.deleteTask(result.task)
+          } else if (result.action === 'cancel') {
+            // do nothing
+          }
+        }
+      },
+      error: (err) => {
+        this.showSnackbar(`Error: ${err.message}`)
+      },
+    })
+
+    this.sub.add(closeSub)
+  }
 
   private resetInput() {
     this.newTaskTitle = ''
