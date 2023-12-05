@@ -5,31 +5,36 @@
           (mousedown)="handlePress($event)"
           (mouseup)="isPressed = false"
           (mouseout)="isPressed = false"
-          (click)="selected.emit(task)"
-          [ngClass]="{'disabled': task.completed, 'pressed': isPressed}">
+          (click)="handleClick($event)"
+          [ngClass]="{'disabled': newTask.completed, 'pressed': isPressed}">
   <mat-checkbox class="checkbox"
-                [ngClass]="{'strike-through': task.completed}"
-                [(ngModel)]="task.completed"
-                (change)="completeChange.emit(task)">
-    {{ task.title }}
+                [ngClass]="{'strike-through': newTask.completed}"
+                [(ngModel)]="newTask.completed"
+                (change)="change.emit(newTask)">
+    {{ newTask.title }}
   </mat-checkbox>
   <mat-chip-set class="chips">
-    @if (task.dueDate) {
-      <mat-chip-row (removed)="task.dueDate = null"
-                    (click)="setDueDate(task)"
+    @if (newTask.dueDate) {
+      <mat-chip-row (removed)="deleteDate()"
+                    (click)="picker.open()"
                     matTooltip="Due date">
         <fa-icon matChipAvatar [icon]="faCalendarDay"></fa-icon>
-        {{ dueDate.toMillis() | date: 'shortDate' }}
+        {{ dueDate?.toMillis() | date: 'shortDate' }}
         <button matChipRemove>
           <fa-icon [icon]="faCircleXmark"></fa-icon>
         </button>
       </mat-chip-row>
     } @else {
-      <mat-chip-row (click)="setDueDate(task)">
-        <fa-icon matChipAvatar [icon]="faCalendarPlus"></fa-icon>
-        Add due date
+      <mat-chip-row (click)="picker.open()" matTooltip="Add due date">
+        <fa-icon [icon]="faCalendarPlus"></fa-icon>
       </mat-chip-row>
     }
+    <mat-form-field style="width: 0; height: 0; visibility: hidden">
+      <input matInput
+             [matDatepicker]="picker"
+             [formControl]="dueDateForm">
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
   </mat-chip-set>
   <fa-icon class="angle-decorator"
            [icon]="faAngleRight"
