@@ -34,11 +34,7 @@ fun Application.configureSecurity() {
   authentication {
     session<TodoSession>("todo-session") {
       validate { session ->
-        if (session.auth.userId == "123abc") {
-          session.auth
-        } else {
-          null
-        }
+        session.auth
       }
 
       challenge {
