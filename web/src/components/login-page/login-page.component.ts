@@ -5,6 +5,7 @@ import { Router } from '@angular/router'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatButtonModule } from '@angular/material/button'
 import { concat, delay, Subscription } from "rxjs";
+import { SessionService } from "../../services/session.service";
 
 @Component({
   selector: 'app-login-page',
@@ -19,6 +20,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private api: NetworkAPIService,
+    private session: SessionService,
     private router: Router,
   ) {
   }
@@ -40,6 +42,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+
     const logoutSub = this.api.logout().pipe(
       delay(1000),
     ).subscribe(

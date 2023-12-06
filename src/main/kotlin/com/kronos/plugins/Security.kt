@@ -74,6 +74,14 @@ private fun Route.loginApi() {
     call.respondText("User logged in: ${session.auth.userId}")
   }
 
+  todoOptionalAuthentication{
+    get("/logout") {
+      val user = call.sessions.get<TodoSession>()?.auth?.userId
+      call.sessions.clear<TodoSession>()
+      call.respondText("User logged out: $user")
+    }
+  }
+
   todoOptionalAuthentication {
     get("/check-auth") {
       val auth = call.principal<TodoAuth>()

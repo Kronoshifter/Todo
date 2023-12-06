@@ -49,6 +49,14 @@ fun Application.configureServer() {
       }
     }
 
+    status(HttpStatusCode.Unauthorized) { call, _ ->
+      if (config.devMode) {
+        call.respondFile(File("src/main/resources/web/browser"), "index.html")
+      } else {
+        call.resolveResource("browser/index.html", "web")?.let { call.respond(it) }
+      }
+    }
+
     exception<Throwable> { call, cause ->
       call.application.log.warn("Unhandled error", cause)
       val message = cause.message ?: cause.javaClass

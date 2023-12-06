@@ -45,6 +45,7 @@ export class SessionService {
   }
 
   logout() {
+    console.log('Session invalid, logging out to get a new one')
     this.session = null
     this.router.navigate(['/login']).catch(reason => { console.log(reason) })
   }
