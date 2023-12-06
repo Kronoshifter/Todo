@@ -70,6 +70,7 @@ private fun Route.loginApi() {
   get("/login") {
     val session = TodoSession(TodoAuth(UUID.randomUUID().toString()))
     call.sessions.set(session)
+    call.application.log.debug("User logged in: ${session.auth.userId}")
     call.respondText("User logged in: ${session.auth.userId}")
   }
 
