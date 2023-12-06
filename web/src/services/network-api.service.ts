@@ -15,10 +15,9 @@ export class NetworkAPIService {
   ) {
   }
 
-  handleError(error: HttpErrorResponse) {
+  handleError(error: any) {
     if (!error.ok) {
-      const message = `Error ${error.status}: ${error.error}`
-      console.log(message)
+      console.log('Error', {...error})
     }
   }
 
@@ -28,6 +27,7 @@ export class NetworkAPIService {
       observe: 'response',
     }).pipe(
       catchError((err, it) => {
+        console.error("Error in login")
         this.handleError(err)
         return it
       }),
@@ -44,6 +44,7 @@ export class NetworkAPIService {
       observe: 'response',
     }).pipe(
       catchError((err, it) => {
+        console.error("Error in logout")
         this.handleError(err)
         return it
       }),
@@ -61,6 +62,7 @@ export class NetworkAPIService {
       },
     }).pipe(
       catchError((err, it) => {
+        console.error("Error in fetchTasks")
         if (err.status === 401) {
           this.session.logout()
         }

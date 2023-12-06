@@ -47,7 +47,7 @@ export class TaskService {
   }
 
   addTask(task: TodoTask): Observable<void> {
-    console.log('Adding new task: ', task.title)
+    console.log('Adding new task: ', {...task})
     return this.api.createTask(task).pipe(
       concatMap(() => {
         return this.fetchTasks()
