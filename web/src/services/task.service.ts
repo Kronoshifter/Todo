@@ -28,11 +28,12 @@ export class TaskService {
 
     this.taskChanged.pipe(
       concatMap((task) => {
-        return this.api.updateTask(task)
-      }),
-      concatMap(() => {
-        return this.api.fetchTasks()
+        return this.updateTask(task)
       })
+    ).subscribe(
+      () => {
+        console.log('Task updated')
+      }
     )
   }
 
@@ -55,7 +56,7 @@ export class TaskService {
   }
 
   updateTask(task: TodoTask): Observable<void> {
-    console.log('Updating task: ', task.title, task.id)
+    console.log('Updating task: ', {...task})
     return this.api.updateTask(task).pipe(
       concatMap(() => {
         return this.fetchTasks()

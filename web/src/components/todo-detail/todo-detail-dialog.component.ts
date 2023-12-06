@@ -87,7 +87,7 @@ export class TodoDetailDialog implements OnInit, OnDestroy {
     this.sub.unsubscribe()
   }
 
-  save() {
+  save() {6
     this.newTask.dueDate = this.dueDate?.toMillis() ?? undefined;
     this.change.emit(this.cloneTask())
     this.dialogRef.close({ task: this.cloneTask(), action: 'save' });
