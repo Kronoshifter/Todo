@@ -37,6 +37,22 @@ export class NetworkAPIService {
     )
   }
 
+  logout(): Observable<HttpResponse<string>> {
+    return this.http.get('/api/logout', {
+      headers: this.session.authHeaders(),
+      responseType: 'text',
+      observe: 'response',
+    }).pipe(
+      catchError((err, it) => {
+        this.handleError(err)
+        return it
+      }),
+      tap((res) => {
+        this.session.session = null
+      }),
+    )
+  }
+
   fetchTasks(): Observable<TodoTask[]> {
     return this.http.get<TodoTask[]>('/api/task', {
       headers: {
