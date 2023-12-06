@@ -15,11 +15,6 @@ import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
 
 @Serializable
-data class TodoTaskUpdateRequest(
-  val task: TodoTask
-)
-
-@Serializable
 data class TodoTaskResponse(
   val tasks: List<TodoTask>,
 )
@@ -37,9 +32,10 @@ fun Route.taskApi() {
   todoAuthentication {
     route("/task") {
       get {
-        // TODO use real data
         call.response.headers.appendIfAbsent("Content-Type", "application/json")
-        call.respond(HttpStatusCode.OK, database.taskList())
+        val tasks = database.taskList()
+        call.application.log.debug("Sending {} tasks", tasks.size)
+        call.respond(HttpStatusCode.OK, tasks)
       }
 
       get("/response") {
@@ -47,7 +43,6 @@ fun Route.taskApi() {
       }
 
       post {
-        // TODO use real data
         val task = call.receive<TodoTask>()
         call.application.log.debug("Received task: {}", task)
         database.insertTask(task).guard {
@@ -55,13 +50,14 @@ fun Route.taskApi() {
           return@post
         }
 
+        call.application.log.debug("Inserted task: {}", task)
+
         call.response.headers.appendIfAbsent("Content-Type", "application/json")
         call.respond(HttpStatusCode.OK, task)
       }
 
       route("/{id}") {
         get {
-          // TODO use real data
           val id = call.parameters["id"]!!
           val task = database.getTask(id).guard {
             call.respond(HttpStatusCode.NotFound, it.message)
@@ -73,24 +69,27 @@ fun Route.taskApi() {
         }
 
         delete {
-          // TODO use real data
           val id = call.parameters["id"]!!
           database.deleteTask(id).guard {
             call.respond(HttpStatusCode.NotFound, it.message)
             return@delete
           }
 
+          call.application.log.debug("Deleted task: {}", id)
+
           call.response.headers.appendIfAbsent("Content-Type", "application/json")
           call.respond(HttpStatusCode.OK)
         }
 
         put {
-          // TODO use real data
           val task = call.receive<TodoTask>()
+          call.application.log.debug("Received task: {}", task)
           database.updateTask(task).guard {
             call.respond(HttpStatusCode.NotFound, it.message)
             return@put
           }
+
+          call.application.log.debug("Updated task: {}", task)
 
           call.response.headers.appendIfAbsent("Content-Type", "application/json")
           call.respond(HttpStatusCode.OK)

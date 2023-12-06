@@ -6,15 +6,14 @@
           (mouseup)="isPressed = false"
           (mouseout)="isPressed = false"
           (click)="handleClick($event)"
-          [ngClass]="{'disabled': newTask.completed, 'pressed': isPressed}">
+          [ngClass]="{'disabled': task.completed, 'pressed': isPressed}">
   <mat-checkbox class="checkbox"
-                [ngClass]="{'strike-through': newTask.completed}"
-                [(ngModel)]="newTask.completed"
-                (change)="change.emit(newTask)">
-    {{ newTask.title }}
+                [ngClass]="{'strike-through': task.completed}"
+                [formControl]="completedForm">
+    {{ task.title }}
   </mat-checkbox>
   <mat-chip-set class="chips">
-    @if (newTask.dueDate) {
+    @if (task.dueDate) {
       <mat-chip-row (removed)="deleteDate()"
                     (click)="picker.open()"
                     matTooltip="Due date">

@@ -27,9 +27,8 @@ export class TodoCardComponent implements OnInit, OnDestroy{
   @Output() change = new EventEmitter<TodoTask>()
   @Output() selected= new EventEmitter<TodoTask>()
 
-  protected newTask: TodoTask
-  protected dueDateForm: FormControl<DateTime | null> = new FormControl(null)
-
+  protected dueDateForm: FormControl<DateTime | null>
+  protected completedForm: FormControl<boolean>
   private sub = new Subscription()
 
   protected readonly faCalendarDay = faCalendarDay;
@@ -48,29 +47,37 @@ export class TodoCardComponent implements OnInit, OnDestroy{
 
   set dueDate(value: DateTime | null) {
     if (value) {
-      this.newTask.dueDate = value.toMillis()
+      this.task.dueDate = value.toMillis()
     } else {
-      this.newTask.dueDate = undefined
+      this.task.dueDate = undefined
     }
   }
 
   constructor(
     private taskService: TaskService
   ) {
-    this.selected.subscribe(this.taskService.taskSelected)
-    this.change.subscribe(this.taskService.taskChanged)
   }
 
   ngOnInit(): void {
-    this.newTask = structuredClone(this.task)
-
     this.dueDateForm = new FormControl(this.dueDate)
     const dateSub = this.dueDateForm.valueChanges.subscribe(value => {
       this.dueDate = value
-      this.change.emit(this.cloneTask())
+      this.change.emit(this.task)
     })
 
+    this.completedForm = new FormControl(this.task.completed)
+    const completedSub = this.completedForm.valueChanges.subscribe(value => {
+      this.task.completed = value
+      this.change.emit(this.task)
+    })
+
+    const selectedSub = this.selected.subscribe(this.taskService.taskSelected)
+    const changeSub = this.change.subscribe(this.taskService.taskChanged)
+
     this.sub.add(dateSub)
+    this.sub.add(completedSub)
+    this.sub.add(selectedSub)
+    this.sub.add(changeSub)
   }
 
   ngOnDestroy(): void {
@@ -85,16 +92,12 @@ export class TodoCardComponent implements OnInit, OnDestroy{
 
   handleClick(event: MouseEvent) {
     if (event.currentTarget === event.target) {
-      this.selected.emit(this.cloneTask())
+      this.selected.emit(this.task)
     }
-  }
-
-  private cloneTask() {
-    return structuredClone(this.newTask);
   }
 
   deleteDate() {
     this.dueDate = null
-    this.change.emit(this.newTask)
+    this.change.emit(this.task)
   }
 }

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { AsyncPipe, CommonModule } from '@angular/common'
 import { MatButtonModule } from '@angular/material/button'
-import { NetworkAPIService } from '../../services/network-api.service'
 import { TodoTask } from '../../model/todo-task'
 import { debounceTime, Subscription } from 'rxjs'
 import { MatCardModule } from '@angular/material/card'
@@ -32,7 +31,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
   private sub: Subscription = new Subscription()
 
   constructor(
-    private api: NetworkAPIService,
     private taskService: TaskService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -41,9 +39,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.fetchTaskResponse()
-    this.fetchTasks()
-
     const selectSub = this.taskService.taskSelected.subscribe({
       next: (task) => {
         this.openTask(task)
@@ -55,7 +50,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     const changeSub = this.taskService.taskChanged.pipe(debounceTime(500)).subscribe({
       next: (task) => {
-        this.updateTask(task)
+        this.taskService.updateTask(task)
       },
       error: (err) => {
         this.showSnackbar(`Error: ${err.message}`)
@@ -81,63 +76,18 @@ export class HomePageComponent implements OnInit, OnDestroy {
         tags: [],
       }
 
-      this.addTask(task)
+      this.taskService.addTask(task).subscribe({
+          next: () => {
+            this.resetInput()
+          },
+          error: (err) => {
+            this.showSnackbar(`Error: ${err.message}`)
+          },
+        }
+      )
     } else {
       this.showSnackbar('Please enter a task title')
     }
-  }
-
-  //API calls
-
-  private fetchTasks() {
-    const taskSub = this.api.fetchTasks().subscribe({
-      next: (tasks) => {
-        this.tasks = [...tasks]
-      },
-      error: (err) => {
-        this.showSnackbar(`Error: ${err.message}`)
-      },
-    })
-
-    this.sub.add(taskSub)
-  }
-
-  private addTask(task: TodoTask) {
-    const taskSub = this.api.createTask(task).subscribe({
-      next: (res) => {
-        this.resetInput()
-        this.fetchTasks()
-      },
-      error: (err) => {
-        this.showSnackbar(`Error: ${err.message}`)
-      },
-    })
-
-    this.sub.add(taskSub)
-  }
-
-  private updateTask(task: TodoTask) {
-    console.log('Updating task: ', task.title, task.id)
-
-    this.api.updateTask(task).subscribe({
-      next: (res) => {
-        this.fetchTasks()
-      },
-      error: (err) => {
-        this.showSnackbar(`Error: ${err.message}`)
-      },
-    })
-  }
-
-  private deleteTask(task: TodoTask) {
-    this.api.deleteTask(task).subscribe({
-      next: (res) => {
-        this.fetchTasks()
-      },
-      error: (err) => {
-        this.showSnackbar(`Error: ${err.message}`)
-      },
-    })
   }
 
   //Helpers
@@ -151,7 +101,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
       data: data,
       autoFocus: 'dialog',
       disableClose: true,
-      width: '500px',
+      width: '70%',
     })
 
     const closeSub = ref.afterClosed().subscribe({
@@ -159,14 +109,30 @@ export class HomePageComponent implements OnInit, OnDestroy {
         const result = res as TodoDialogResult
         if (result) {
           if (result.action === 'save') {
-            this.updateTask(result.task)
+            this.taskService.updateTask(result.task).subscribe({
+                next: () => {
+
+                },
+                error: (err) => {
+                  this.showSnackbar(`Error: ${err.message}`)
+                },
+              }
+            )
           } else if (result.action === 'delete') {
-            this.deleteTask(result.task)
+            this.taskService.deleteTask(result.task).subscribe({
+              next: () => {
+                // do nothing
+              },
+              error: (err) => {
+                this.showSnackbar(`Error: ${err.message}`)
+              },
+            })
           } else if (result.action === 'cancel') {
             // do nothing
           }
         }
-      },
+      }
+      ,
       error: (err) => {
         this.showSnackbar(`Error: ${err.message}`)
       },
@@ -174,6 +140,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     this.sub.add(closeSub)
   }
+
 
   private resetInput() {
     this.newTaskTitle = ''

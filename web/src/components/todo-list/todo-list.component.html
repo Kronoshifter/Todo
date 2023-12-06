@@ -1,7 +1,6 @@
 <div class="task-list" auto-animate>
-  @for (task of tasks | sortByComplete; track task.id) {
-    <todo-card [task]="task"
-               (selected)="select.emit($event)"></todo-card>
+  @for (task of tasks | async | sortByComplete; track task.id) {
+    <todo-card [task]="task"></todo-card>
   } @empty {
     <mat-card class="empty-card center" appearance="outlined"> No tasks. You're all caught up! </mat-card>
   }

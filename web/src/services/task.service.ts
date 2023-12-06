@@ -1,16 +1,74 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TodoTask } from "../model/todo-task";
-import { Subject } from "rxjs";
+import { BehaviorSubject, concatMap, map, Observable, Subject } from "rxjs";
+import { NetworkAPIService } from "./network-api.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
+
   private _taskSelected = new Subject<TodoTask>()
+
+  get taskSelected() {
+    return this._taskSelected
+  }
+
   private _taskChanged = new Subject<TodoTask>()
 
-  get taskSelected() { return this._taskSelected }
-  get taskChanged() { return this._taskChanged }
+  get taskChanged() {
+    return this._taskChanged
+  }
 
-  constructor() { }
+  private _tasks = new BehaviorSubject<TodoTask[]>([])
+  tasks = this._tasks.asObservable()
+
+  constructor(private api: NetworkAPIService) {
+    this.fetchTasks()
+
+    this.taskChanged.pipe(
+      concatMap((task) => {
+        return this.api.updateTask(task)
+      }),
+      concatMap(() => {
+        return this.api.fetchTasks()
+      })
+    )
+  }
+
+  fetchTasks(): Observable<void> {
+    console.log('Retrieving tasks')
+    return this.api.fetchTasks().pipe(
+      map((tasks) => {
+        this._tasks.next(tasks)
+      })
+    )
+  }
+
+  addTask(task: TodoTask): Observable<void> {
+    console.log('Adding new task: ', task.title)
+    return this.api.createTask(task).pipe(
+      concatMap(() => {
+        return this.fetchTasks()
+      })
+    )
+  }
+
+  updateTask(task: TodoTask): Observable<void> {
+    console.log('Updating task: ', task.title, task.id)
+    return this.api.updateTask(task).pipe(
+      concatMap(() => {
+        return this.fetchTasks()
+      })
+    )
+  }
+
+  deleteTask(task: TodoTask) {
+    console.log('Deleting task: ', task.title, task.id)
+    return this.api.deleteTask(task).pipe(
+      concatMap(() => {
+        return this.fetchTasks()
+      })
+    )
+  }
 }

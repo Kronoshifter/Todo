@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MAT_DIALOG_DATA,
@@ -17,6 +17,7 @@ import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faCalendarDay } from "@fortawesome/free-solid-svg-icons";
 import { DateTime } from "luxon";
 import { Subscription } from "rxjs";
+import { TaskService } from "../../services/task.service";
 
 export interface TodoDialogData {
   oldTask: TodoTask
@@ -38,6 +39,8 @@ export type TodoDialogAction = 'cancel' | 'save' | 'delete'
 })
 export class TodoDetailDialog implements OnInit, OnDestroy {
 
+  @Output() change = new EventEmitter<TodoTask>()
+
   protected newTask: TodoTask
   private sub = new Subscription()
 
@@ -46,7 +49,8 @@ export class TodoDetailDialog implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<TodoDetailDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: TodoDialogData
+    @Inject(MAT_DIALOG_DATA) public data: TodoDialogData,
+    private tasks: TaskService
   ) {
   }
 
@@ -68,13 +72,15 @@ export class TodoDetailDialog implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.newTask = structuredClone(this.data.oldTask);
-
     this.dueDateForm = new FormControl(this.dueDate);
     const dateSub = this.dueDateForm.valueChanges.subscribe(value => {
       this.dueDate = value
     })
 
+    const changeSub = this.change.subscribe(this.tasks.taskChanged)
+
     this.sub.add(dateSub)
+    this.sub.add(changeSub)
   }
 
   ngOnDestroy() {
@@ -83,7 +89,8 @@ export class TodoDetailDialog implements OnInit, OnDestroy {
 
   save() {
     this.newTask.dueDate = this.dueDate?.toMillis() ?? undefined;
-    this.dialogRef.close({ task: this.newTask, action: 'save' });
+    this.change.emit(this.cloneTask())
+    this.dialogRef.close({ task: this.cloneTask(), action: 'save' });
   }
 
   cancel() {
@@ -92,5 +99,9 @@ export class TodoDetailDialog implements OnInit, OnDestroy {
 
   delete() {
     this.dialogRef.close({ task: this.data.oldTask, action: 'delete' });
+  }
+
+  private cloneTask(): TodoTask {
+    return structuredClone(this.newTask) as TodoTask
   }
 }

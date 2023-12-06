@@ -43,8 +43,9 @@ fun Application.core() {
   routing {
     singlePageApplication {
       val config by inject<TodoConfig>()
+      application.log.trace("Devmode: {}", config.devMode)
       useResources = !config.devMode
-      filesPath = if (config.devMode) "src/main/resources/web/browser" else "web"
+      filesPath = if (config.devMode) "src/main/resources/web/browser" else "web/browser"
       defaultPage = "index.html"
       ignoreFiles { it.endsWith(".txt") }
     }
