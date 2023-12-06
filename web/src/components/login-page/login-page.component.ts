@@ -42,7 +42,6 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-
     const logoutSub = this.api.logout().pipe(
       delay(1000),
     ).subscribe(

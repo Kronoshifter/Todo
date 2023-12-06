@@ -39,7 +39,6 @@ export class NetworkAPIService {
 
   logout(): Observable<HttpResponse<string>> {
     return this.http.get('/api/logout', {
-      headers: this.session.authHeaders(),
       responseType: 'text',
       observe: 'response',
     }).pipe(
