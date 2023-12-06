@@ -63,6 +63,7 @@ export class NetworkAPIService {
     }).pipe(
       catchError((err, it) => {
         console.error("Error in fetchTasks")
+        this.handleError(err)
         if (err.status === 401) {
           this.session.logout()
         }

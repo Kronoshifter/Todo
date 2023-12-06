@@ -7,7 +7,6 @@ import com.kronos.utils.TodoSession
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
@@ -74,12 +73,11 @@ private fun Route.loginApi() {
     call.respondText("User logged in: ${session.auth.userId}")
   }
 
-  todoOptionalAuthentication{
-    get("/logout") {
-      val user = call.sessions.get<TodoSession>()?.auth?.userId
-      call.sessions.clear<TodoSession>()
-      call.respondText("User logged out: $user")
-    }
+  get("/logout") {
+    val user = call.sessions.get<TodoSession>()?.auth?.userId
+    call.sessions.clear<TodoSession>()
+    call.application.log.debug("User logged out: $user")
+    call.respondText("User logged out: $user")
   }
 
   todoOptionalAuthentication {

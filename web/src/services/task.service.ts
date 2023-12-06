@@ -24,8 +24,6 @@ export class TaskService {
   tasks = this._tasks.asObservable()
 
   constructor(private api: NetworkAPIService) {
-    this.fetchTasks()
-
     this.taskChanged.pipe(
       concatMap((task) => {
         return this.updateTask(task)
